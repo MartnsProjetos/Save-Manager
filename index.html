@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Store Manager - Admin Portal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #3b82f6 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Professional animated background */
+        .bg-pattern {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0.1;
+            background-image: 
+                radial-gradient(circle at 25% 25%, #ffffff 2px, transparent 2px),
+                radial-gradient(circle at 75% 75%, #ffffff 1px, transparent 1px);
+            background-size: 50px 50px, 30px 30px;
+            animation: patternMove 20s linear infinite;
+        }
+
+        @keyframes patternMove {
+            0% { transform: translateX(0) translateY(0); }
+            100% { transform: translateX(50px) translateY(50px); }
+        }
+
+        /* Floating geometric shapes */
+        .shape {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .shape:nth-child(1) { 
+            width: 60px; height: 60px; left: 10%; top: 20%; 
+            animation-delay: 0s; border-radius: 50%;
+        }
+        .shape:nth-child(2) { 
+            width: 40px; height: 40px; right: 15%; top: 30%; 
+            animation-delay: 2s;
+        }
+        .shape:nth-child(3) { 
+            width: 80px; height: 80px; left: 20%; bottom: 25%; 
+            animation-delay: 4s; border-radius: 50%;
+        }
+        .shape:nth-child(4) { 
+            width: 30px; height: 30px; right: 25%; bottom: 40%; 
+            animation-delay: 6s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            33% { transform: translateY(-20px) rotate(120deg); }
+            66% { transform: translateY(10px) rotate(240deg); }
+        }
+
+        /* Main login container */
+        .login-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2.5rem;
+            width: 440px;
+            box-shadow: 
+                0 25px 50px rgba(0, 0, 0, 0.15),
+                0 0 0 1px rgba(255, 255, 255, 0.1);
+            position: relative;
+            z-index: 10;
+            animation: slideIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(40px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* Header section */
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+            animation: fadeInUp 1s ease-out 0.3s both;
+        }
+
+        .logo {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #2563eb, #1e40af);
+            border-radius: 16px;
+            margin: 0 auto 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            color: white;
+            font-weight: 700;
+            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .logo::before {
+            content: '🏪';
+            position: absolute;
+            font-size: 2rem;
+            animation: iconPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes iconPulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        .title {
+            color: #1e40af;
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            color: #64748b;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        /* Form styling */
+        .form {
+            animation: fadeInUp 1s ease-out 0.5s both;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .form-label {
+            display: block;
+            color: #374151;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            letter-spacing: 0.025em;
+        }
+
+        .input-container {
+            position: relative;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.875rem 1rem 0.875rem 3rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 1rem;
+            color: #1f2937;
+            background: #ffffff;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+            transform: translateY(-1px);
+        }
+
+        .form-input::placeholder {
+            color: #9ca3af;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6b7280;
+            font-size: 1.1rem;
+            transition: color 0.3s ease;
+        }
+
+        .form-input:focus + .input-icon {
+            color: #2563eb;
+        }
+
+        /* Login button */
+        .login-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            margin-top: 0.5rem;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.5);
+            background: linear-gradient(135deg, #1d4ed8, #1e40af);
+        }
+
+        .login-btn:hover::before {
+            left: 100%;
+        }
+
+        .login-btn:active {
+            transform: translateY(0);
+        }
+
+        .login-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Button states */
+        .btn-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .loading-spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .success-icon {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #10b981;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+        }
+
+        /* Footer links */
+        .footer-links {
+            text-align: center;
+            margin-top: 2rem;
+            animation: fadeIn 1s ease-out 0.8s both;
+        }
+
+        .footer-links a {
+            color: #2563eb;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: #1d4ed8;
+            text-decoration: underline;
+        }
+
+        /* Security badge */
+        .security-badge {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 1.5rem;
+            padding: 0.75rem;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            border-radius: 8px;
+            color: #059669;
+            font-size: 0.875rem;
+            font-weight: 500;
+            animation: fadeIn 1s ease-out 1s both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Responsive design */
+        @media (max-width: 480px) {
+            .login-container {
+                width: 90%;
+                padding: 2rem;
+                margin: 1rem;
+            }
+            
+            .title {
+                font-size: 1.5rem;
+            }
+            
+            .logo {
+                width: 60px;
+                height: 60px;
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background elements -->
+    <div class="bg-pattern"></div>
+    <div class="shape"></div>
+    <div class="shape"></div>
+    <div class="shape"></div>
+    <div class="shape"></div>
+
+    <div class="login-container">
+        <div class="header">
+            <div class="logo"></div>
+            <h1 class="title">Store Manager Pro</h1>
+            <p class="subtitle">Portal Administrativo de E-commerce</p>
+        </div>
+
+        <form class="form" id="loginForm">
+            <div class="form-group">
+                <label class="form-label" for="email">Email Corporativo</label>
+                <div class="input-container">
+                    <input 
+                        type="email" 
+                        id="email"
+                        class="form-input" 
+                        placeholder="admin@suaempresa.com"
+                        required
+                        autocomplete="email"
+                    >
+                    <div class="input-icon">📧</div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="password">Senha</label>
+                <div class="input-container">
+                    <input 
+                        type="password" 
+                        id="password"
+                        class="form-input" 
+                        placeholder="Digite sua senha"
+                        required
+                        autocomplete="current-password"
+                    >
+                    <div class="input-icon">🔐</div>
+                </div>
+            </div>
+
+            <button type="submit" class="login-btn" id="loginBtn">
+                <div class="btn-content" id="btnContent">
+                    <span>Acessar Painel</span>
+                </div>
+            </button>
+        </form>
+
+        <div class="security-badge">
+            <span>🔒</span>
+            <span>Conexão segura SSL/TLS</span>
+        </div>
+
+        <div class="footer-links">
+            <a href="#" onclick="showForgotPassword()">Esqueceu sua senha?</a>
+            <span style="margin: 0 1rem; color: #d1d5db;">•</span>
+            <a href="#" onclick="showSupport()">Suporte Técnico</a>
+        </div>
+    </div>
+
+    <!-- Import login.js for database operations -->
+    <script src="login.js"></script>
+    
+    <script>
+        // Form submission with MySQL database verification
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const btn = document.getElementById('loginBtn');
+            const btnContent = document.getElementById('btnContent');
+            const email = document.getElementById('email');
+            const password = document.getElementById('password');
+            
+            // Validate fields
+            if (!email.value || !password.value) {
+                shakeForm('Por favor, preencha todos os campos');
+                return;
+            }
+            
+            // Show loading state
+            btn.disabled = true;
+            btnContent.innerHTML = `
+                <div class="loading-spinner"></div>
+                <span>Verificando credenciais...</span>
+            `;
+            
+            try {
+                // Call login function from login.js
+                const result = await authenticateUser(email.value, password.value);
+                
+                if (result.success) {
+                    // Login successful
+                    btnContent.innerHTML = `
+                        <div class="success-icon">✓</div>
+                        <span>Acesso autorizado</span>
+                    `;
+                    btn.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+                    
+                    setTimeout(() => {
+                        showSuccessMessage(result.user);
+                    }, 1000);
+                    
+                } else {
+                    // Login failed - user not found
+                    if (result.userNotFound) {
+                        showCreateAccountModal(email.value);
+                    } else {
+                        // Wrong password
+                        shakeForm('Senha incorreta. Tente novamente.');
+                    }
+                    resetButton();
+                }
+                
+            } catch (error) {
+                console.error('Erro na autenticação:', error);
+                shakeForm('Erro de conexão. Tente novamente.');
+                resetButton();
+            }
+        });
+        
+        function shakeForm(message = '') {
+            const container = document.querySelector('.login-container');
+            container.style.animation = 'shake 0.5s ease-in-out';
+            
+            if (message) {
+                showErrorMessage(message);
+            }
+            
+            setTimeout(() => {
+                container.style.animation = 'slideIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1)';
+            }, 500);
+        }
+        
+        function showErrorMessage(message) {
+            // Remove existing error message
+            const existingError = document.querySelector('.error-message');
+            if (existingError) {
+                existingError.remove();
+            }
+            
+            // Create new error message
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'error-message';
+            errorDiv.style.cssText = `
+                background: rgba(239, 68, 68, 0.1);
+                border: 1px solid rgba(239, 68, 68, 0.3);
+                color: #dc2626;
+                padding: 0.75rem;
+                border-radius: 8px;
+                margin: 1rem 0;
+                font-size: 0.9rem;
+                text-align: center;
+                animation: fadeIn 0.3s ease-out;
+            `;
+            errorDiv.textContent = message;
+            
+            const form = document.querySelector('.form');
+            form.appendChild(errorDiv);
+            
+            // Remove error message after 5 seconds
+            setTimeout(() => {
+                if (errorDiv.parentNode) {
+                    errorDiv.remove();
+                }
+            }, 5000);
+        }
+        
+        function showCreateAccountModal(email) {
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.5);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 1000;
+                animation: fadeIn 0.3s ease-out;
+            `;
+            
+            modal.innerHTML = `
+                <div style="
+                    background: white;
+                    padding: 2rem;
+                    border-radius: 16px;
+                    width: 90%;
+                    max-width: 400px;
+                    text-align: center;
+                    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+                ">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">👤</div>
+                    <h3 style="color: #1e40af; margin-bottom: 1rem; font-size: 1.5rem;">Usuário não encontrado</h3>
+                    <p style="color: #64748b; margin-bottom: 1.5rem; line-height: 1.5;">
+                        O email <strong>${email}</strong> não está cadastrado no sistema.
+                        <br><br>
+                        Deseja criar uma nova conta de administrador?
+                    </p>
+                    <div style="display: flex; gap: 1rem; justify-content: center;">
+                        <button onclick="closeModal()" style="
+                            padding: 0.75rem 1.5rem;
+                            border: 2px solid #e2e8f0;
+                            background: white;
+                            color: #64748b;
+                            border-radius: 8px;
+                            cursor: pointer;
+                            font-weight: 500;
+                        ">Cancelar</button>
+                        <button onclick="createAccount('${email}')" style="
+                            padding: 0.75rem 1.5rem;
+                            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+                            border: none;
+                            color: white;
+                            border-radius: 8px;
+                            cursor: pointer;
+                            font-weight: 500;
+                        ">Criar Conta</button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            window.currentModal = modal;
+        }
+        
+        function closeModal() {
+            if (window.currentModal) {
+                window.currentModal.remove();
+                window.currentModal = null;
+            }
+        }
+        
+        async function createAccount(email) {
+            closeModal();
+            
+            const name = prompt('Digite seu nome completo:');
+            if (!name) return;
+            
+            const confirmPassword = prompt('Digite uma senha para a nova conta:');
+            if (!confirmPassword) return;
+            
+            try {
+                const result = await createNewUser(email, confirmPassword, name);
+                
+                if (result.success) {
+                    alert(`✅ Conta criada com sucesso!\n\nBem-vindo, ${name}!\nVocê pode fazer login agora.`);
+                    document.getElementById('email').value = email;
+                    document.getElementById('password').value = '';
+                    document.getElementById('password').focus();
+                } else {
+                    alert('❌ Erro ao criar conta: ' + result.error);
+                }
+            } catch (error) {
+                console.error('Erro ao criar conta:', error);
+                alert('❌ Erro de conexão ao criar conta.');
+            }
+        }
+        
+        function showSuccessMessage(user) {
+            const message = `
+                ✅ Login realizado com sucesso!
+                
+                👋 Bem-vindo, ${user.name || user.email}!
+                🏪 Store Manager Pro
+                📊 Carregando dashboard administrativo...
+                
+                Último acesso: ${new Date().toLocaleString('pt-BR')}
+            `;
+            
+            alert(message);
+            
+            // In a real system, redirect to dashboard
+            // window.location.href = '/dashboard';
+            resetForm();
+        }
+        
+        function resetButton() {
+            const btn = document.getElementById('loginBtn');
+            const btnContent = document.getElementById('btnContent');
+            
+            setTimeout(() => {
+                btn.disabled = false;
+                btn.style.background = 'linear-gradient(135deg, #2563eb, #1d4ed8)';
+                btnContent.innerHTML = '<span>Acessar Painel</span>';
+            }, 1000);
+        }
+        
+        function resetForm() {
+            setTimeout(() => {
+                resetButton();
+                document.getElementById('loginForm').reset();
+                
+                // Remove any error messages
+                const errorMessage = document.querySelector('.error-message');
+                if (errorMessage) {
+                    errorMessage.remove();
+                }
+            }, 2000);
+        }
+        
+        function showForgotPassword() {
+            const email = prompt('Digite seu email para recuperação de senha:');
+            if (email) {
+                alert(`🔑 Link de recuperação enviado!\n\nVerifique sua caixa de entrada em: ${email}`);
+            }
+        }
+        
+        function showSupport() {
+            alert('🎧 Suporte Técnico Store Manager Pro\n\n📧 suporte@storemanager.com\n📞 (11) 9999-9999\n🕐 Atendimento 24/7\n💬 Chat online disponível');
+        }
+        
+        // Add CSS for animations
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes shake {
+                0%, 100% { transform: translateX(0); }
+                25% { transform: translateX(-5px); }
+                75% { transform: translateX(5px); }
+            }
+            @keyframes fadeIn {
+                from { opacity: 0; }
+                to { opacity: 1; }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        // Enhanced input interactions
+        document.querySelectorAll('.form-input').forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.style.transform = 'translateY(-2px)';
+                this.parentElement.style.boxShadow = '0 8px 25px rgba(37, 99, 235, 0.15)';
+            });
+            
+            input.addEventListener('blur', function() {
+                this.parentElement.style.transform = 'translateY(0)';
+                this.parentElement.style.boxShadow = 'none';
+            });
+        });
+    </script>
+</body>
+</html>
