@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GestPro - Sistema de Gestão</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-blue: #2563eb;
+            --light-blue: #3b82f6;
+            --dark-blue: #1e40af;
+            --white: #ffffff;
+            --light-gray: #f8fafc;
+            --gray: #64748b;
+            --dark-gray: #334155;
+            --success: #10b981;
+            --error: #ef4444;
+            --shadow: rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--light-blue) 100%);
+            min-height: 100vh;
+            color: var(--dark-gray);
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 2rem;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .auth-card {
+            background: var(--white);
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px var(--shadow);
+            width: 100%;
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .logo h1 {
+            color: var(--primary-blue);
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .logo p {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--dark-gray);
+            font-weight: 500;
+        }
+
+        input {
+            width: 100%;
+            padding: 0.875rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: var(--light-gray);
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            background: var(--white);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 0.875rem;
+            background: var(--primary-blue);
+            color: var(--white);
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 1rem;
+        }
+
+        .btn:hover {
+            background: var(--dark-blue);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.3);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .link {
+            color: var(--primary-blue);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .link:hover {
+            color: var(--dark-blue);
+            text-decoration: underline;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .mt-1 {
+            margin-top: 1rem;
+        }
+
+        .error {
+            color: var(--error);
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        .success {
+            color: var(--success);
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        /* Dashboard Styles */
+        .dashboard {
+            background: var(--light-gray);
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar {
+            background: var(--white);
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px var(--shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar h1 {
+            color: var(--primary-blue);
+            font-size: 1.5rem;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logout-btn {
+            background: var(--error);
+            color: var(--white);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: #dc2626;
+        }
+
+        .dashboard-content {
+            display: flex;
+        }
+
+        .sidebar {
+            width: 250px;
+            background: var(--white);
+            min-height: calc(100vh - 80px);
+            padding: 2rem 0;
+            box-shadow: 2px 0 10px var(--shadow);
+        }
+
+        .menu-item {
+            padding: 1rem 2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+        }
+
+        .menu-item:hover, .menu-item.active {
+            background: var(--light-gray);
+            border-left-color: var(--primary-blue);
+            color: var(--primary-blue);
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px var(--shadow);
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-blue);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--gray);
+            font-size: 0.875rem;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 12px;
+            max-width: 400px;
+            width: 90%;
+            animation: slideUp 0.3s ease-out;
+        }
+
+        .close-modal {
+            float: right;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--gray);
+        }
+
+        .close-modal:hover {
+            color: var(--dark-gray);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .auth-card {
+                padding: 2rem;
+            }
+
+            .dashboard-content {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                min-height: auto;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Página de Login -->
+    <div id="loginPage" class="page active">
+        <div class="container">
+            <div class="auth-card">
+                <div class="logo">
+                    <h1>GestPro</h1>
+                    <p>Sistema de Gestão Profissional</p>
+                </div>
+
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="loginEmail">Email</label>
+                        <input type="email" id="loginEmail" required>
+                        <div class="error" id="loginEmailError"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="loginPassword">Senha</label>
+                        <input type="password" id="loginPassword" required>
+                        <div class="error" id="loginPasswordError"></div>
+                    </div>
+
+                    <button type="submit" class="btn">Entrar</button>
+                </form>
+
+                <div class="text-center">
+                    <a href="#" class="link" id="forgotPasswordLink">Esqueceu a senha?</a>
+                </div>
+
+                <div class="text-center mt-1">
+                    <span>Não tem uma conta? </span>
+                    <a href="#" class="link" id="showRegisterLink">Cadastrar Usuário</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Página de Cadastro -->
+    <div id="registerPage" class="page">
+        <div class="container">
+            <div class="auth-card">
+                <div class="logo">
+                    <h1>GestPro</h1>
+                    <p>Criar Nova Conta</p>
+                </div>
+
+                <form id="registerForm">
+                    <div class="form-group">
+                        <label for="registerName">Nome Completo</label>
+                        <input type="text" id="registerName" required>
+                        <div class="error" id="registerNameError"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="registerEmail">Email</label>
+                        <input type="email" id="registerEmail" required>
+                        <div class="error" id="registerEmailError"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="registerPassword">Senha</label>
+                        <input type="password" id="registerPassword" required>
+                        <div class="error" id="registerPasswordError"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirmar Senha</label>
+                        <input type="password" id="confirmPassword" required>
+                        <div class="error" id="confirmPasswordError"></div>
+                    </div>
+
+                    <button type="submit" class="btn">Cadastrar</button>
+                </form>
+
+                <div class="text-center mt-1">
+                    <span>Já tem uma conta? </span>
+                    <a href="#" class="link" id="showLoginLink">Fazer Login</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div id="dashboardPage" class="page dashboard">
+        <nav class="navbar">
+            <h1>GestPro Dashboard</h1>
+            <div class="user-menu">
+                <span id="userName">Usuário</span>
+                <button class="logout-btn" id="logoutBtn">Sair</button>
+            </div>
+        </nav>
+
+        <div class="dashboard-content">
+            <aside class="sidebar">
+                <div class="menu-item active" data-section="overview">
+                    <strong>📊 Visão Geral</strong>
+                </div>
+                <div class="menu-item" data-section="products">
+                    <strong>📦 Produtos</strong>
+                </div>
+                <div class="menu-item" data-section="finances">
+                    <strong>💰 Finanças</strong>
+                </div>
+                <div class="menu-item" data-section="reports">
+                    <strong>📈 Relatórios</strong>
+                </div>
+                <div class="menu-item" data-section="profile">
+                    <strong>👤 Perfil do Usuário</strong>
+                </div>
+            </aside>
+
+            <main class="main-content">
+                <div id="overviewSection" class="content-section">
+                    <h2 style="margin-bottom: 2rem; color: var(--primary-blue);">Resumo da Loja</h2>
+                    
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-number">1,234</div>
+                            <div class="stat-label">Total de Produtos</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">R$ 45.678</div>
+                            <div class="stat-label">Vendas do Mês</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">89</div>
+                            <div class="stat-label">Pedidos Hoje</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">4.8</div>
+                            <div class="stat-label">Avaliação Média</div>
+                        </div>
+                    </div>
+
+                    <div style="background: var(--white); padding: 2rem; border-radius: 12px; box-shadow: 0 4px 15px var(--shadow);">
+                        <h3 style="color: var(--primary-blue); margin-bottom: 1rem;">Atividades Recentes</h3>
+                        <p style="color: var(--gray);">• Novo pedido #1234 - R$ 299,90</p>
+                        <p style="color: var(--gray);">• Produto "Notebook Dell" adicionado</p>
+                        <p style="color: var(--gray);">• Relatório mensal gerado</p>
+                    </div>
+                </div>
+
+                <div id="productsSection" class="content-section" style="display: none;">
+                    <h2 style="color: var(--primary-blue);">Gestão de Produtos</h2>
+                    <p style="color: var(--gray); margin-top: 1rem;">Aqui você pode gerenciar todos os produtos da sua loja.</p>
+                </div>
+
+                <div id="financesSection" class="content-section" style="display: none;">
+                    <h2 style="color: var(--primary-blue);">Controle Financeiro</h2>
+                    <p style="color: var(--gray); margin-top: 1rem;">Acompanhe receitas, despesas e fluxo de caixa.</p>
+                </div>
+
+                <div id="reportsSection" class="content-section" style="display: none;">
+                    <h2 style="color: var(--primary-blue);">Relatórios</h2>
+                    <p style="color: var(--gray); margin-top: 1rem;">Gere relatórios detalhados de vendas e performance.</p>
+                </div>
+
+                <div id="profileSection" class="content-section" style="display: none;">
+                    <h2 style="color: var(--primary-blue);">Perfil do Usuário</h2>
+                    <p style="color: var(--gray); margin-top: 1rem;">Gerencie suas informações pessoais e configurações.</p>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Modal Esqueceu Senha -->
+    <div id="forgotPasswordModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" id="closeForgotModal">&times;</span>
+            <h2 style="color: var(--primary-blue); margin-bottom: 1rem;">Recuperar Senha</h2>
+            <form id="forgotPasswordForm">
+                <div class="form-group">
+                    <label for="forgotEmail">Digite seu email</label>
+                    <input type="email" id="forgotEmail" required>
+                </div>
+                <button type="submit" class="btn">Enviar Link de Recuperação</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Incluir o arquivo login.js -->
+    <script src="assets/js/db.js"></script>
+    
+    <script>
+        // Gerenciamento de páginas
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.getElementById(pageId).classList.add('active');
+            
+            if (pageId === 'dashboardPage') {
+                document.body.style.background = 'var(--light-gray)';
+            } else {
+                document.body.style.background = 'linear-gradient(135deg, var(--primary-blue) 0%, var(--light-blue) 100%)';
+            }
+        }
+
+        // Validações
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+
+        function validatePassword(password) {
+            return password.length >= 6;
+        }
+
+        function showError(elementId, message) {
+            const errorElement = document.getElementById(elementId);
+            errorElement.textContent = message;
+            errorElement.style.display = 'block';
+        }
+
+        function hideError(elementId) {
+            const errorElement = document.getElementById(elementId);
+            errorElement.style.display = 'none';
+        }
+
+        function clearAllErrors() {
+            document.querySelectorAll('.error').forEach(error => {
+                error.style.display = 'none';
+            });
+        }
+
+        // Login
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            clearAllErrors();
+
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            if (!validateEmail(email)) {
+                showError('loginEmailError', 'Email inválido');
+                return;
+            }
+
+            if (!validatePassword(password)) {
+                showError('loginPasswordError', 'Senha deve ter pelo menos 6 caracteres');
+                return;
+            }
+
+            try {
+                const result = await AuthSystem.login(email, password);
+                
+                if (result.success) {
+                    // Login bem-sucedido
+                    sessionStorage.setItem('currentUser', JSON.stringify(result.user));
+                    document.getElementById('userName').textContent = result.user.name;
+                    showPage('dashboardPage');
+                } else {
+                    if (result.error === 'USER_NOT_FOUND') {
+                        alert('Usuário não encontrado. Redirecionando para cadastro...');
+                        showPage('registerPage');
+                    } else if (result.error === 'INVALID_PASSWORD') {
+                        showError('loginPasswordError', 'Senha incorreta');
+                    } else {
+                        showError('loginPasswordError', result.message || 'Erro ao fazer login');
+                    }
+                }
+            } catch (error) {
+                console.error('Erro no login:', error);
+                showError('loginPasswordError', 'Erro de conexão. Tente novamente.');
+            }
+        });
+
+        // Cadastro
+        document.getElementById('registerForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            clearAllErrors();
+
+            const name = document.getElementById('registerName').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            let hasError = false;
+
+            if (name.length < 2) {
+                showError('registerNameError', 'Nome deve ter pelo menos 2 caracteres');
+                hasError = true;
+            }
+
+            if (!validateEmail(email)) {
+                showError('registerEmailError', 'Email inválido');
+                hasError = true;
+            }
+
+            if (!validatePassword(password)) {
+                showError('registerPasswordError', 'Senha deve ter pelo menos 6 caracteres');
+                hasError = true;
+            }
+
+            if (password !== confirmPassword) {
+                showError('confirmPasswordError', 'Senhas não conferem');
+                hasError = true;
+            }
+
+            if (hasError) return;
+
+            try {
+                const result = await AuthSystem.register(name, email, password);
+                
+                if (result.success) {
+                    alert('Cadastro realizado com sucesso! Redirecionando para login...');
+                    showPage('loginPage');
+                } else {
+                    if (result.error === 'EMAIL_EXISTS') {
+                        showError('registerEmailError', 'Email já cadastrado');
+                    } else {
+                        showError('registerEmailError', result.message || 'Erro ao cadastrar usuário');
+                    }
+                }
+            } catch (error) {
+                console.error('Erro no cadastro:', error);
+                showError('registerEmailError', 'Erro de conexão. Tente novamente.');
+            }
+        });
+
+        // Navegação
+        document.getElementById('showRegisterLink').addEventListener('click', function(e) {
+            e.preventDefault();
+            showPage('registerPage');
+        });
+
+        document.getElementById('showLoginLink').addEventListener('click', function(e) {
+            e.preventDefault();
+            showPage('loginPage');
+        });
+
+        // Modal Esqueceu Senha
+        document.getElementById('forgotPasswordLink').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.getElementById('forgotPasswordModal').classList.add('active');
+        });
+
+        document.getElementById('closeForgotModal').addEventListener('click', function() {
+            document.getElementById('forgotPasswordModal').classList.remove('active');
+        });
+
+        document.getElementById('forgotPasswordForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const email = document.getElementById('forgotEmail').value;
+            
+            if (!validateEmail(email)) {
+                alert('Email inválido');
+                return;
+            }
+
+            try {
+                const result = await AuthSystem.forgotPassword(email);
+                if (result.success) {
+                    alert('Link de recuperação enviado para ' + email);
+                } else {
+                    alert('Email não encontrado no sistema');
+                }
+            } catch (error) {
+                alert('Erro ao enviar email de recuperação');
+            }
+            
+            document.getElementById('forgotPasswordModal').classList.remove('active');
+        });
+
+        // Dashboard
+        document.getElementById('logoutBtn').addEventListener('click', function() {
+            sessionStorage.removeItem('currentUser');
+            showPage('loginPage');
+        });
+
+        // Menu lateral do Dashboard
+        document.querySelectorAll('.menu-item').forEach(item => {
+            item.addEventListener('click', function() {
+                // Remove active de todos os itens
+                document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
+                // Adiciona active ao item clicado
+                this.classList.add('active');
+
+                // Esconde todas as seções
+                document.querySelectorAll('.content-section').forEach(section => {
+                    section.style.display = 'none';
+                });
+
+                // Mostra a seção correspondente
+                const section = this.getAttribute('data-section');
+                document.getElementById(section + 'Section').style.display = 'block';
+            });
+        });
+
+        // Verificar se usuário já está logado
+        window.addEventListener('load', function() {
+            const currentUser = sessionStorage.getItem('currentUser');
+            if (currentUser) {
+                const user = JSON.parse(currentUser);
+                document.getElementById('userName').textContent = user.name;
+                showPage('dashboardPage');
+            }
+        });
+
+        // Fechar modal ao clicar fora
+        window.addEventListener('click', function(e) {
+            const modal = document.getElementById('forgotPasswordModal');
+            if (e.target === modal) {
+                modal.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>
