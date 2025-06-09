@@ -8,6 +8,20 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
     <link rel="stylesheet" href="../assets/css/Estoque.css">
 </head>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const logoutBtn = document.getElementById('logoutBtn');
+    if(logoutBtn) {
+      logoutBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        // Se precisar limpar localStorage ou cookies, faz aqui
+
+        // Redireciona para a página inicial
+        window.location.href = '../index.html'; // Ajuste o caminho se necessário
+      });
+    }
+  });
+</script>
 <body>
     <div class="dashboard">
     <!-- Sidebar -->
@@ -20,7 +34,7 @@
         </div>
         <ul class="menu">
             <li class="menu-item">
-                <a href="../public/Dashboard.html" class="menu-link active">
+                <a href="../public/Dashboard.html" class="menu-link ">
                     <span class="menu-icon"><i class="fas fa-tachometer-alt"></i></span>
                     <span class="menu-text">Dashboard</span>
                 </a>
@@ -44,7 +58,7 @@
                 </a>
             </li>
             <li class="menu-item">
-                <a href="Estoque.html" class="menu-link">
+                <a href="Estoque.html" class="menu-link active">
                     <span class="menu-icon"><i class="fas fa-warehouse"></i></span>
                     <span class="menu-text">Estoque</span>
                 </a>
@@ -67,6 +81,12 @@
                     <span class="menu-text">Painel Admin</span>
                 </a>
             </li>
+            <li class="menu-item">
+    <a href="#" id="logoutBtn" class="menu-link">
+        <span class="menu-icon"><i class="fas fa-sign-out-alt"></i></span>
+        <span class="menu-text">Deslogar</span>
+    </a>
+</li>
         </ul>
         <div class="toggle-btn" id="sidebarToggle">
             <i class="fas fa-chevron-right"></i>

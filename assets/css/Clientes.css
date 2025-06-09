@@ -1,628 +1,238 @@
-/* Reset e Estilos Gerais */
+/* Reset e Estilos Gerais - Remove margens/paddings padrão */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;                    /* Remove margem padrão de todos elementos */
+    padding: 0;                   /* Remove padding padrão de todos elementos */
+    box-sizing: border-box;       /* Inclui padding/border no tamanho total */
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; /* Fonte moderna */
 }
 
+/* Variáveis CSS - Cores e valores reutilizáveis */
 :root {
-    --primary-color: #1e88e5;
-    --primary-light: #6ab7ff;
-    --primary-dark: #005cb2;
-    --secondary-color: #e91e63;
-    --text-primary: #212121;
-    --text-secondary: #757575;
-    --background-light: #f5f5f5;
-    --background-card: #ffffff;
-    --shadow-light: 0 2px 10px rgba(0, 0, 0, 0.1);
-    --shadow-medium: 0 4px 12px rgba(0, 0, 0, 0.15);
-    --border-radius: 12px;
-    --transition-speed: 0.3s;
+    --primary-color: #4285f4;     /* Azul principal (cor do Google) */
+    --sidebar-bg: #2d3748;        /* Cinza escuro da sidebar */
+    --text-primary: #2d3748;      /* Texto principal escuro */
+    --text-secondary: #718096;    /* Texto secundário mais claro */
+    --background-light: #f7fafc;  /* Fundo claro da página */
+    --background-card: #ffffff;   /* Fundo branco dos cards */
+    --border-color: #e2e8f0;      /* Cor das bordas */
+    --shadow-light: 0 1px 3px rgba(0, 0, 0, 0.1);    /* Sombra suave */
+    --shadow-medium: 0 4px 6px rgba(0, 0, 0, 0.07);  /* Sombra média */
+    --border-radius: 12px;        /* Raio das bordas arredondadas */
+    --transition-speed: 0.3s;     /* Velocidade das animações */
 }
 
+/* Estilo do corpo da página */
 body {
-    background-color: var(--background-light);
-    color: var(--text-primary);
-    height: 100vh;
-    overflow: hidden;
+    background-color: var(--background-light); /* Fundo cinza claro */
+    color: var(--text-primary);                /* Texto escuro */
+    height: 100vh;                             /* Altura total da tela */
+    overflow: hidden;                          /* Remove scroll da página */
+    font-size: 14px;                           /* Tamanho base da fonte */
 }
 
-/* Layout principal */
+/* Layout principal - Container flex */
 .dashboard {
-    display: flex;
-    height: 100vh;
+    display: flex;        /* Layout flexível horizontal */
+    height: 100vh;        /* Altura total da viewport */
 }
 
-/* Sidebar */
+/* ========== SIDEBAR - BARRA LATERAL ESQUERDA ========== */
 .sidebar {
-    width: 260px;
-    height: 100%;
-    background: linear-gradient(to bottom, var(--primary-dark), var(--primary-color));
-    color: white;
-    padding: 20px 0;
-    transition: width var(--transition-speed);
-    position: relative;
-    z-index: 10;
-    box-shadow: var(--shadow-medium);
+    width: 260px;                              /* Largura padrão da sidebar */
+    height: 100%;                              /* Altura total */
+    background-color: var(--sidebar-bg);       /* Fundo escuro */
+    color: white;                              /* Texto branco */
+    padding: 0;                                /* Sem padding interno */
+    transition: width var(--transition-speed); /* Animação do colapso */
+    position: relative;                        /* Para posicionar elementos filhos */
+    z-index: 10;                              /* Fica acima de outros elementos */
+    box-shadow: var(--shadow-medium);         /* Sombra à direita */
 }
 
+/* Sidebar colapsada (reduzida) */
 .sidebar.collapsed {
-    width: 80px;
+    width: 80px;          /* Largura reduzida quando colapsada */
 }
 
+/* Cabeçalho da sidebar (logo + texto) */
 .sidebar-header {
-    display: flex;
-    align-items: center;
-    padding: 0 20px;
-    margin-bottom: 30px;
+    display: flex;                                    /* Layout flex horizontal */
+    align-items: center;                              /* Centraliza verticalmente */
+    padding: 20px;                                    /* Espaçamento interno */
+    margin-bottom: 20px;                              /* Espaço abaixo */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* Linha divisória sutil */
 }
 
+/* Logo "G" - Ícone principal */
 .logo {
-    font-size: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
-    background-color: rgba(255, 255, 255, 0.2);
-    border-radius: 10px;
+    font-size: 20px;                        /* Tamanho da fonte do "G" */
+    display: flex;                          /* Layout flex */
+    align-items: center;                    /* Centraliza verticalmente */
+    justify-content: center;                /* Centraliza horizontalmente */
+    width: 36px;                           /* Largura do quadrado */
+    height: 36px;                          /* Altura do quadrado */
+    background-color: var(--primary-color); /* Fundo azul */
+    border-radius: 8px;                     /* Bordas arredondadas */
+    font-weight: 600;                       /* Fonte semi-negrito */
+    color: white;                           /* Texto branco */
 }
 
+/* Texto ao lado do logo */
 .logo-text {
-    margin-left: 15px;
-    font-size: 20px;
-    font-weight: 600;
-    transition: opacity var(--transition-speed);
+    margin-left: 12px;                      /* Espaço à esquerda */
+    font-size: 18px;                        /* Tamanho da fonte */
+    font-weight: 600;                       /* Fonte semi-negrito */
+    transition: opacity var(--transition-speed); /* Animação de fade */
 }
 
+/* Esconde o texto quando sidebar está colapsada */
 .sidebar.collapsed .logo-text {
-    opacity: 0;
-    width: 0;
-    overflow: hidden;
+    opacity: 0;           /* Transparente */
+    width: 0;             /* Largura zero */
+    overflow: hidden;     /* Esconde o conteúdo */
 }
 
+/* Lista do menu - Remove estilos padrão */
 .menu {
-    list-style: none;
+    list-style: none;     /* Remove bullets da lista */
+    padding: 0 16px;      /* Padding horizontal */
 }
 
+/* Item individual do menu */
 .menu-item {
-    margin-bottom: 5px;
+    margin-bottom: 4px;   /* Espaço entre itens */
 }
 
+/* ========== LINKS DO MENU - ONDE FICAM AS ABAS ========== */
 .menu-link {
-    display: flex;
-    align-items: center;
-    padding: 12px 20px;
-    color: rgba(255, 255, 255, 0.8);
-    text-decoration: none;
-    transition: all var(--transition-speed);
-    border-radius: 0 30px 30px 0;
-    margin-right: 15px;
+    display: flex;                          /* Layout flex horizontal */
+    align-items: center;                    /* Centraliza verticalmente */
+    padding: 12px 16px;                     /* Espaçamento interno */
+    color: rgba(255, 255, 255, 0.7);       /* Texto branco semi-transparente */
+    text-decoration: none;                  /* Remove sublinhado */
+    transition: all var(--transition-speed); /* Animação suave */
+    border-radius: 8px;                     /* Bordas arredondadas */
+    font-size: 14px;                        /* Tamanho da fonte */
+    font-weight: 500;                       /* Fonte média */
 }
 
+/* Efeito hover nos links */
 .menu-link:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-    color: white;
+    background-color: rgba(255, 255, 255, 0.1); /* Fundo claro no hover */
+    color: white;                                /* Texto totalmente branco */
 }
 
-/* Clientes em destaque */
-.menu-item:nth-child(3) .menu-link {
-    background-color: white;
-    color: var(--primary-color);
-    box-shadow: var(--shadow-light);
+/* ========== LINK ATIVO - ABA SELECIONADA ATUAL ========== */
+.menu-link.active {
+    background-color: var(--primary-color);      /* Fundo azul */
+    color: white;                                /* Texto branco */
+    box-shadow: 0 2px 4px rgba(66, 133, 244, 0.3); /* Sombra azul */
 }
+/* ESTA É A CLASSE QUE DEFINE QUAL ABA ESTÁ ATIVA/SELECIONADA */
 
+/* Ícone dos itens de menu */
 .menu-icon {
-    font-size: 18px;
-    width: 40px;
-    display: flex;
-    justify-content: center;
+    font-size: 16px;       /* Tamanho do ícone */
+    width: 20px;           /* Largura fixa */
+    display: flex;         /* Layout flex */
+    justify-content: center; /* Centraliza o ícone */
+    margin-right: 12px;    /* Espaço à direita */
 }
 
+/* Texto dos itens de menu */
 .menu-text {
-    margin-left: 10px;
-    transition: opacity var(--transition-speed);
+    transition: opacity var(--transition-speed); /* Animação de fade */
+    white-space: nowrap;                         /* Não quebra linha */
 }
 
+/* Esconde texto quando sidebar colapsada */
 .sidebar.collapsed .menu-text {
-    opacity: 0;
-    width: 0;
-    overflow: hidden;
+    opacity: 0;           /* Transparente */
+    width: 0;             /* Largura zero */
+    overflow: hidden;     /* Esconde conteúdo */
 }
 
+/* Remove margem do ícone quando colapsada */
+.sidebar.collapsed .menu-icon {
+    margin-right: 0;      /* Remove margem direita */
+}
+
+/* Botão de colapsar/expandir sidebar */
 .toggle-btn {
-    position: absolute;
-    right: -12px;
-    top: 70px;
-    background-color: white;
-    color: var(--primary-color);
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    box-shadow: var(--shadow-light);
-    transition: transform var(--transition-speed);
+    position: absolute;                      /* Posição absoluta */
+    right: -12px;                           /* 12px para fora da sidebar */
+    top: 80px;                              /* 80px do topo */
+    background-color: white;                 /* Fundo branco */
+    color: var(--text-secondary);           /* Cor cinza */
+    width: 24px;                            /* Largura */
+    height: 24px;                           /* Altura */
+    border-radius: 50%;                     /* Circular */
+    display: flex;                          /* Layout flex */
+    align-items: center;                    /* Centraliza verticalmente */
+    justify-content: center;                /* Centraliza horizontalmente */
+    cursor: pointer;                        /* Cursor de clique */
+    box-shadow: var(--shadow-light);        /* Sombra suave */
+    transition: transform var(--transition-speed); /* Animação de rotação */
+    border: 1px solid var(--border-color);  /* Borda cinza */
 }
 
+/* Rotaciona o botão quando sidebar colapsada */
 .sidebar.collapsed .toggle-btn {
-    transform: rotate(180deg);
+    transform: rotate(180deg);              /* Gira 180 graus */
 }
 
-/* Conteúdo Principal */
-.main-content {
-    flex: 1;
-    overflow-y: auto;
-    padding: 20px;
-    transition: margin-left var(--transition-speed);
+/* ========== RODAPÉ ========== */
+.footer {
+    margin-top: auto;                       /* Empurra para o final */
+    padding: 20px 24px;                     /* Espaçamento interno */
+    border-top: 1px solid var(--border-color); /* Linha superior */
+    background-color: var(--background-card);   /* Fundo branco */
+    display: flex;                          /* Layout flex */
+    justify-content: space-between;         /* Espaço entre elementos */
+    align-items: center;                    /* Centraliza verticalmente */
+    font-size: 12px;                        /* Fonte pequena */
+    color: var(--text-secondary);           /* Texto cinza */
 }
 
-/* Navbar Superior */
-.navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 25px;
+/* Container dos links do rodapé */
+.footer-links {
+    display: flex;        /* Layout flex horizontal */
+    gap: 16px;            /* Espaço entre links */
 }
 
-.navbar-title {
-    font-size: 24px;
-    font-weight: 600;
-    color: var(--text-primary);
+/* Links individuais do rodapé */
+.footer-link {
+    color: var(--text-secondary);           /* Cor cinza */
+    text-decoration: none;                  /* Remove sublinhado */
+    transition: color var(--transition-speed); /* Animação de cor */
 }
 
-.navbar-right {
-    display: flex;
-    align-items: center;
+/* Efeito hover nos links do rodapé */
+.footer-link:hover {
+    color: var(--primary-color);           /* Fica azul no hover */
 }
 
-.search-bar {
-    position: relative;
-    margin-right: 20px;
+/* Texto de copyright */
+.footer-copyright {
+    color: var(--text-secondary);          /* Cor cinza */
 }
 
-.search-input {
-    padding: 10px 15px 10px 40px;
-    border: none;
-    background-color: var(--background-card);
-    border-radius: 30px;
-    width: 250px;
-    box-shadow: var(--shadow-light);
-    font-size: 14px;
-    transition: all var(--transition-speed);
-}
-
-.search-input:focus {
-    outline: none;
-    width: 280px;
-    box-shadow: var(--shadow-medium);
-}
-
-.search-icon {
-    position: absolute;
-    left: 15px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--text-secondary);
-}
-
-.user-profile {
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-}
-
-.user-img {
-    width: 40px;
-    height: 40px;
-    background-color: var(--primary-light);
-    color: white;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 600;
-    margin-right: 12px;
-}
-
-.user-info {
-    display: flex;
-    flex-direction: column;
-}
-
-.user-name {
-    font-weight: 600;
-    font-size: 14px;
-}
-
-.user-role {
-    color: var(--text-secondary);
-    font-size: 12px;
-}
-
-/* Área de Conteúdo */
-.content {
-    padding-bottom: 20px;
-}
-
-/* Seletor de Localização */
-.location-selector {
-    display: flex;
-    align-items: center;
-    background-color: var(--background-card);
-    padding: 15px 20px;
-    border-radius: var(--border-radius);
-    box-shadow: var(--shadow-light);
-    margin-bottom: 25px;
-    cursor: pointer;
-    transition: box-shadow var(--transition-speed);
-}
-
-.location-selector:hover {
-    box-shadow: var(--shadow-medium);
-}
-
-.location-icon {
-    color: var(--primary-color);
-    font-size: 20px;
-    margin-right: 15px;
-}
-
-.location-name {
-    font-weight: 600;
-    font-size: 16px;
-}
-
-.location-arrow {
-    margin-left: auto;
-    color: var(--text-secondary);
-}
-
-/* Barra de Filtros */
-.filter-bar {
-    display: flex;
-    margin-bottom: 25px;
-    background-color: var(--background-card);
-    border-radius: 30px;
-    box-shadow: var(--shadow-light);
-    overflow: hidden;
-    width: fit-content;
-}
-
-.filter {
-    padding: 12px 25px;
-    cursor: pointer;
-    font-weight: 500;
-    transition: all var(--transition-speed);
-}
-
-.filter:hover {
-    background-color: rgba(0, 0, 0, 0.05);
-}
-
-.filter.active {
-    background-color: var(--primary-color);
-    color: white;
-}
-
-/* Grid Layout */
-.grid {
-    display: grid;
-    grid-template-columns: repeat(12, 1fr);
-    gap: 20px;
-}
-
-.col-span-3 {
-    grid-column: span 3;
-}
-
-.col-span-6 {
-    grid-column: span 6;
-}
-
-.col-span-12 {
-    grid-column: span 12;
-}
-
-/* Cards */
-.card {
-    background-color: var(--background-card);
-    border-radius: var(--border-radius);
-    box-shadow: var(--shadow-light);
-    padding: 20px;
-    height: 100%;
-    transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.card:hover {
-    transform: translateY(-3px);
-    box-shadow: var(--shadow-medium);
-}
-
-.card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-.card-title {
-    font-weight: 600;
-    font-size: 16px;
-    color: var(--text-primary);
-}
-
-.card-icon {
-    color: var(--primary-color);
-    font-size: 18px;
-}
-
-/* Informações do clima atual */
-.weather-main {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 25px;
-}
-
-.weather-temp {
-    font-size: 48px;
-    font-weight: 300;
-    line-height: 1;
-}
-
-.weather-unit {
-    font-size: 24px;
-    vertical-align: top;
-}
-
-.weather-icon {
-    font-size: 40px;
-    color: var(--primary-color);
-}
-
-.weather-info {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
-}
-
-.weather-detail {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-}
-
-.weather-detail-icon {
-    font-size: 16px;
-    color: var(--primary-color);
-    margin-bottom: 5px;
-}
-
-.weather-detail-text {
-    font-size: 12px;
-    color: var(--text-secondary);
-    margin-bottom: 3px;
-}
-
-.weather-detail-value {
-    font-weight: 600;
-    font-size: 14px;
-}
-
-/* Valores e indicadores */
-.info-value {
-    font-size: 48px;
-    font-weight: 300;
-    text-align: center;
-    margin-bottom: 5px;
-}
-
-.info-label {
-    text-align: center;
-    color: var(--text-secondary);
-    margin-bottom: 15px;
-}
-
-.air-quality-meter {
-    height: 6px;
-    background-color: #e0e0e0;
-    border-radius: 3px;
-    position: relative;
-    margin-bottom: 10px;
-}
-
-.air-quality-indicator {
-    width: 12px;
-    height: 12px;
-    background-color: var(--primary-color);
-    border-radius: 50%;
-    position: absolute;
-    top: 50%;
-    transform: translate(-50%, -50%);
-}
-
-.air-quality-level {
-    text-align: center;
-    font-size: 14px;
-    margin-bottom: 20px;
-    color: var(--primary-color);
-    font-weight: 500;
-}
-
-/* Gráficos */
-.chart-container {
-    height: 250px;
-    margin-top: 10px;
-}
-
-/* Tabs */
-.tab-nav {
-    display: flex;
-}
-
-.tab-item {
-    padding: 5px 15px;
-    font-size: 14px;
-    border-radius: 20px;
-    cursor: pointer;
-}
-
-.tab-item.active {
-    background-color: var(--primary-color);
-    color: white;
-}
-
-/* Link Ver todos */
-.view-all {
-    color: var(--primary-color);
-    text-decoration: none;
-    font-size: 14px;
-    font-weight: 500;
-}
-
-.view-all:hover {
-    text-decoration: underline;
-}
-
-/* Previsão do tempo de 7 dias */
-.weather-forecast {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 10px;
-}
-
-.forecast-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    flex: 1;
-    padding: 10px;
-    border-radius: 10px;
-    transition: background-color var(--transition-speed);
-}
-
-.forecast-item:hover {
-    background-color: rgba(0, 0, 0, 0.05);
-}
-
-.forecast-day {
-    font-weight: 500;
-    margin-bottom: 10px;
-}
-
-.forecast-icon {
-    font-size: 24px;
-    color: var(--primary-color);
-    margin-bottom: 10px;
-}
-
-.forecast-temp {
-    font-size: 14px;
-}
-
-.high {
-    font-weight: 600;
-}
-
-.low {
-    color: var(--text-secondary);
-}
-
-/* Responsividade */
-@media (max-width: 1200px) {
-    .grid {
-        grid-template-columns: repeat(6, 1fr);
-    }
-    
-    .col-span-3 {
-        grid-column: span 3;
-    }
-    
-    .col-span-6, .col-span-12 {
-        grid-column: span 6;
-    }
-}
-
+/* ========== RESPONSIVIDADE - TABLETS E MOBILE ========== */
 @media (max-width: 768px) {
-    .grid {
-        grid-template-columns: repeat(3, 1fr);
-    }
-    
-    .col-span-3, .col-span-6, .col-span-12 {
-        grid-column: span 3;
-    }
-    
+    /* Sidebar sempre colapsada em telas pequenas */
     .sidebar {
-        width: 80px;
+        width: 80px;          /* Largura reduzida */
     }
     
+    /* Esconde textos em mobile */
     .logo-text, .menu-text {
-        display: none;
+        display: none;        /* Não exibe */
     }
     
-    .search-input {
-        width: 180px;
+    /* Empilha elementos do rodapé */
+    .footer {
+        flex-direction: column; /* Layout vertical */
+        gap: 12px;             /* Espaço entre elementos */
+        text-align: center;    /* Centraliza texto */
     }
-    
-    .weather-forecast {
-        overflow-x: auto;
-        justify-content: flex-start;
-    }
-    
-    .forecast-item {
-        min-width: 80px;
-    }
-}
-
-@media (max-width: 576px) {
-    .grid {
-        display: flex;
-        flex-direction: column;
-        gap: 15px;
-    }
-    
-    .user-info {
-        display: none;
-    }
-    
-    .search-input {
-        width: 140px;
-    }
-    
-    .navbar-title {
-        font-size: 20px;
-    }
-    
-    .filter-bar {
-        width: 100%;
-        justify-content: space-between;
-    }
-    
-    .filter {
-        padding: 10px 15px;
-        font-size: 14px;
-    }
-}
-
-/* Tema Escuro (opcional) */
-.dark-theme {
-    --primary-color: #2196f3;
-    --primary-light: #6ec6ff;
-    --primary-dark: #0069c0;
-    --secondary-color: #f50057;
-    --text-primary: #f5f5f5;
-    --text-secondary: #b0b0b0;
-    --background-light: #121212;
-    --background-card: #1e1e1e;
-    --shadow-light: 0 2px 10px rgba(0, 0, 0, 0.3);
-    --shadow-medium: 0 4px 12px rgba(0, 0, 0, 0.4);
-}
-
-.dark-theme .menu-item:nth-child(3) .menu-link {
-    background-color: var(--background-card);
-    color: var(--primary-light);
 }

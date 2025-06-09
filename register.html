@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GestPro - Cadastro</title>
+    <link rel="stylesheet" href="assets/css/index.css">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-card">
+            <div class="logo">
+                <h1>GestPro</h1>
+                <p>Criar Nova Conta</p>
+            </div>
+            
+            <form id="registerForm" class="login-form">
+                <div class="form-group">
+                    <label for="name">Nome Completo</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">E-mail</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Senha</label>
+                    <input type="password" id="password" name="password" required minlength="6">
+                </div>
+                
+                <div class="form-group">
+                    <label for="confirmPassword">Repetir Senha</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" required minlength="6">
+                </div>
+                
+                <button type="submit" class="btn-primary">Cadastrar</button>
+                
+                <div class="form-links">
+                    <p class="register-link">
+                        Já tem uma conta? <a href="index.html">Faça login</a>
+                    </p>
+                </div>
+            </form>
+            
+            <div id="message" class="message"></div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const messageDiv = document.getElementById('message');
+            
+            // Validação frontend
+            if (password !== confirmPassword) {
+                messageDiv.innerHTML = '<div class="error">As senhas não coincidem!</div>';
+                return;
+            }
+            
+            if (password.length < 6) {
+                messageDiv.innerHTML = '<div class="error">A senha deve ter pelo menos 6 caracteres!</div>';
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ name, email, password })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    messageDiv.innerHTML = '<div class="success">Cadastro realizado com sucesso! Redirecionando...</div>';
+                    setTimeout(() => {
+                        window.location.href = '/index.html';
+                    }, 2000);
+                } else {
+                    messageDiv.innerHTML = `<div class="error">${data.message}</div>`;
+                }
+            } catch (error) {
+                messageDiv.innerHTML = '<div class="error">Erro de conexão. Tente novamente.</div>';
+            }
+        });
+        
+        // Validação em tempo real das senhas
+        document.getElementById('confirmPassword').addEventListener('input', function() {
+            const password = document.getElementById('password').value;
+            const confirmPassword = this.value;
+            const messageDiv = document.getElementById('message');
+            
+            if (confirmPassword && password !== confirmPassword) {
+                messageDiv.innerHTML = '<div class="error">As senhas não coincidem!</div>';
+            } else if (confirmPassword && password === confirmPassword) {
+                messageDiv.innerHTML = '<div class="success">Senhas coincidem!</div>';
+            } else {
+                messageDiv.innerHTML = '';
+            }
+        });
+    </script>
+</body>
+</html>
