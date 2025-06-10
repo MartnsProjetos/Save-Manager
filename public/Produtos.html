@@ -94,7 +94,28 @@
     </div>
 </div>
 
+    <!-- Formulário Cadastro de Produtos -->
+    <section class="produtos-form-section">
+        <h2>Adicionar Novo Produto</h2>
+        <form id="formProdutoNovo">
+            <label for="nomeProduto">Nome do Produto:</label>
+            <input type="text" id="nomeProduto" name="nomeProduto" required>
 
+            <label for="precoProduto">Preço:</label>
+            <input type="number" id="precoProduto" name="precoProduto" step="0.01" required>
+
+            <label for="quantidadeProduto">Quantidade do Produto:</label>
+            <input type="number" id="quantidadeProduto" name="quantidadeProduto" required>
+
+            <label for="categoriaProduto">Categoria:</label>
+            <input type="text" id="categoriaProduto" name="categoriaProduto" required>
+
+            <label for="fotoProduto">Foto do Produto(opcional):</label>
+            <input type="file" id="fotoProduto" name="fotoProduto">
+
+            <button type="submit">Adicionar Produto</button>
+        </form>
+    </section>
     
             <!-- Footer -->
             <div class="footer">
