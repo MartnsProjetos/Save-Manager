@@ -217,6 +217,7 @@ body {
     color: var(--text-secondary);          /* Cor cinza */
 }
 
+
 /* ========== RESPONSIVIDADE - TABLETS E MOBILE ========== */
 @media (max-width: 768px) {
     /* Sidebar sempre colapsada em telas pequenas */
